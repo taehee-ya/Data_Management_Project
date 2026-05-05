@@ -3,7 +3,7 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta
 
-API_KEY = "3c07f6fa1f82f96954e83288529d98df111be7f2e397bc2f6ad6203474d646e7"
+API_KEY = #API key is revoked here as Github sent emails to revoke it. Still visible on the one submitted on CodeBench
 def get_flights(date):
 
     url = "https://serpapi.com/search.json"
