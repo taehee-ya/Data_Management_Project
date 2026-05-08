@@ -1,0 +1,49 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-05-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+getwd()
+setwd("/Users/ba/Downloads")
+hotels <- read.csv("cancun_hotel_prices.csv")
+flights <- read.csv("finalFlightData.csv")
+weather <- read.csv("cancun_weather_final.csv")
+
+hotels$date <- as.Date(hotels$date, format="%m/%d/%Y")
+HotelMean <- aggregate(price_usd ~ date, data = hotels, mean) #mean is used to get average hotel price per day since we have many hotel prices for a single day.
+ggplot(HotelMean, aes(x = date,y = price_usd)) + geom_line() + labs(title = "Average Hotel Prices Per Date",x = "Date",y = "Price")
+
+# We can clearly see the price varies across different dates, which means that season and timing affects hotel prices.
+
+flights$date <- as.Date(flights$date, format="%m/%d/%Y")
+flightMean <- aggregate(price ~ date, data = flights, mean)
+ggplot(flightMean, aes(x = date, y = price)) + geom_line() + labs(title = "Flight Prices Per Day",x = "Date",y = "Price")
+
+# This graph shows only 2 months flight prices for 2026, and mostly during these months flight prices tend to higher. However, the graph shows frequent fluctuations which means that prices can change alot in a short time. This data can be used to create a more realistic sythetic data for more accurate predictions.
+
+
+weatherCol <- weather[4:nrow(weather), ]
+weatherCol$time <- as.Date(weatherCol[,1], format = "%m/%d/%y")
+weatherCol$month <- format(weatherCol$time, "%b")
+
+weatherCol$rain <- as.numeric(weatherCol[,11])
+
+ggplot(weatherCol, aes(x = month, y = rain)) +geom_boxplot() +labs(title = "Rain by Month",x = "month",y = "rain")
+
+# this boxlot shows that from december to may there is less rainfall while from june to november there is more rain. The extreme points can be seen in june and august, which suggest that this might be precipitation season so it might impact travel planning and prices which could be due to flight cancelations etc
+```
